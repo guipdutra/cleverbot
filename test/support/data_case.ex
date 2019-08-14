@@ -16,23 +16,9 @@ defmodule Cleverbot.DataCase do
 
   using do
     quote do
-      alias Cleverbot.Repo
 
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
       import Cleverbot.DataCase
     end
-  end
-
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Cleverbot.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Cleverbot.Repo, {:shared, self()})
-    end
-
-    :ok
   end
 
   @doc """

@@ -7,8 +7,7 @@ use Mix.Config
 
 # General application configuration
 config :api,
-  namespace: Cleverbot,
-  ecto_repos: [Cleverbot.Repo]
+  namespace: Cleverbot
 
 # Configures the endpoint
 config :api, CleverbotWeb.Endpoint,

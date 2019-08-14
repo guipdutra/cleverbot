@@ -24,14 +24,4 @@ defmodule CleverbotWeb.ChannelCase do
       @endpoint CleverbotWeb.Endpoint
     end
   end
-
-
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Cleverbot.Repo)
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Cleverbot.Repo, {:shared, self()})
-    end
-    :ok
-  end
-
 end

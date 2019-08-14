@@ -35,11 +35,11 @@ defmodule Cleverbot.Mixfile do
     [
       {:phoenix, "~> 1.3.4"},
       {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
-      {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:poison, "~> 3.1"},
+      {:redix, ">= 0.0.0"},
+      {:castore, ">= 0.0.0"},
       {:websockex, "~> 0.4.0"}
     ]
   end
@@ -52,9 +52,7 @@ defmodule Cleverbot.Mixfile do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      "test": ["test"]
     ]
   end
 end

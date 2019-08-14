@@ -9,6 +9,10 @@ defmodule Cleverbot.Application do
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(CleverbotWeb.Endpoint, []),
+      %{
+        id: Phoenix.PubSub.PG2,
+        start: {Phoenix.PubSub.PG2, :start_link, [:cleverbot_topic, []]}
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
