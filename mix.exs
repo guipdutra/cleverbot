@@ -40,6 +40,7 @@ defmodule Cleverbot.Mixfile do
       {:poison, "~> 3.1"},
       {:redix, ">= 0.0.0"},
       {:castore, ">= 0.0.0"},
+      {:sma, "~> 0.1"},
       {:websockex, "~> 0.4.0"}
     ]
   end

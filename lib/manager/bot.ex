@@ -17,9 +17,15 @@ defmodule Cleverbot.Bot do
 
   def handle_info({:stock, value}, state) do
     stock = StockParse.parse(Poison.decode!(value))
+    Redix.command(state.redis_conn, ["RPUSH", "stock_#{stock.currency_code}", stock.price])
 
-    Redix.command(conn, ["LPUSH", stock.currency_code, stock.price])
+    case Redix.command(state.redis_conn, ["LRANGE", "stock_#{stock.currency_code}", 1, -1]) do
+      {:ok , stocks} ->
+        IO.puts stocks
+      {:error , reason} ->
+        IO.puts reason
+    end
 
-    {:noreply, {}}
+    {:noreply, state}
   end
 end
