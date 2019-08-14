@@ -10,11 +10,14 @@ defmodule Cleverbot.StocksService do
 
   def handle_frame({type, msg}, state) do
     IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
-    {:ok, state}
-  end
 
-  def handle_cast({:send, {type, msg} = frame}, state) do
-    IO.puts "Sending #{type} frame with payload: #{msg}"
-    {:reply, frame, state}
+    case msg do
+      "[1002,1]" ->
+        IO.puts "Subscription acknowledgement"
+      _ ->
+        Phoenix.PubSub.broadcast(:cleverbot_topic, "stocks_topic", {:stock, msg})
+    end
+
+    {:ok, state}
   end
 end
