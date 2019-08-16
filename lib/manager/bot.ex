@@ -2,6 +2,8 @@ defmodule Cleverbot.Bot do
   use GenServer
   alias Cleverbot.Manager.Utils.StockParse
   alias Cleverbot.Repo.Repository
+  alias Cleverbot.Manager.Strategies.SimpleMovingAverage
+  alias Cleverbot.Manager.Homebroker
   import SMA
 
   def start_link(params) do
@@ -14,56 +16,27 @@ defmodule Cleverbot.Bot do
 
   def init(params) do
     Phoenix.PubSub.subscribe(:cleverbot_topic, "stocks_topic")
-    {:ok, %{currency_code: params.currency_code}}
+    {:ok, %{currency_code: params.currency_code, short_period: params.short_period, long_period: params.long_period}}
   end
 
   def handle_info({:stock, value}, state) do
     stock = StockParse.parse(Poison.decode!(value))
+
     if stock.currency_code == state.currency_code do
       Repository.save_stock(%{currency_code: state.currency_code, price: stock.price})
-
-      {:ok, stocks_updated} = Repository.get_stocks(state.currency_code)
-      stocks = stocks_updated |> Enum.map(&String.to_float/1)
-
-      short = sma(stocks, 9)
-      long = sma(stocks, 40)
-
+      {:ok, stocks} = Repository.get_stocks(state.currency_code)
       IO.inspect stocks
-      if !Enum.empty?(short) && !Enum.empty?(long) do
-        IO.puts "media curta 9 periodos"
-        short = List.first(short)
-        IO.inspect short
 
-        IO.puts "media longa 40 periodos"
-        long = List.first(long)
-        IO.inspect long
+      case SimpleMovingAverage.execute(%{short_period: state.short_period, long_period: state.long_period, stocks: stocks}) do
+        :buy ->
+          {:ok, orders} = Repository.get_orders(state.currency_code)
+          Homebroker.buy(%{currency_code: state.currency_code, quantity: 100, price: stock.price}, orders)
 
-        if short > long do
-          {:ok, transactions} = Repository.get_orders(state.currency_code)
+        :sell ->
+          {:ok, orders} = Repository.get_orders(state.currency_code)
+          Homebroker.sell(%{currency_code: state.currency_code, quantity: 100, price: stock.price}, orders)
 
-          with false <- Enum.empty?(transactions),
-               transaction <- List.first(transactions),
-               "sell" <- Poison.decode!(transaction)["type"]
-          do
-            Repository.save_order(state.currency_code, %{price: stock.price, type: "buy", quantity: 100})
-            IO.puts "ordem de COMPRA, preço: #{stock.price}"
-          else
-            true ->
-              Repository.save_order(state.currency_code, %{price: stock.price, type: "buy", quantity: 100})
-            "buy" ->
-              IO.puts "Já existe uma ordem para esta ação: #{stock.currency_code}"
-          end
-        else
-            {:ok, transactions} = Repository.get_orders(state.currency_code)
-
-            with false <- Enum.empty?(transactions),
-                 transaction <- List.first(transactions),
-                 "buy" <- Poison.decode!(transaction)["type"]
-            do
-              Repository.save_order(state.currency_code, %{price: stock.price, type: "sell", quantity: 100})
-              IO.puts "ordem de VENDA, preço: #{stock.price}"
-            end
-        end
+        _ -> :not_enough_periods
       end
 
       {:ok, orders} = Repository.get_orders(state.currency_code)
