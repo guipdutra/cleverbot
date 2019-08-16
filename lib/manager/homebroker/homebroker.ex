@@ -23,6 +23,7 @@ defmodule Cleverbot.Manager.Homebroker do
       false ->
         save_order_if_there_is_one_active(stock, orders)
         IO.puts "ordem de VENDA, preço: #{stock.price}"
+        stock
     end
 
     {:ok, result}

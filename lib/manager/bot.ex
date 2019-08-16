@@ -28,14 +28,8 @@ defmodule Cleverbot.Bot do
       IO.inspect stocks
 
       case SimpleMovingAverage.execute(%{short_period: state.short_period, long_period: state.long_period, stocks: stocks}) do
-        :buy ->
-          {:ok, orders} = Repository.get_orders(state.currency_code)
-          Homebroker.buy(%{currency_code: state.currency_code, quantity: 100, price: stock.price}, orders)
-
-        :sell ->
-          {:ok, orders} = Repository.get_orders(state.currency_code)
-          Homebroker.sell(%{currency_code: state.currency_code, quantity: 100, price: stock.price}, orders)
-
+        :buy -> create_buy_order(state.currency_code, stock)
+        :sell -> create_sell_order(state.currency_code, stock)
         _ -> :not_enough_periods
       end
 
@@ -44,5 +38,15 @@ defmodule Cleverbot.Bot do
     end
 
     {:noreply, state}
+  end
+
+  defp create_buy_order(currency_code, stock) do
+    {:ok, orders} = Repository.get_orders(currency_code)
+    Homebroker.buy(%{currency_code: currency_code, quantity: 100, price: stock.price}, orders)
+  end
+
+  defp create_sell_order(currency_code, stock) do
+    {:ok, orders} = Repository.get_orders(currency_code)
+    Homebroker.sell(%{currency_code: currency_code, quantity: 100, price: stock.price}, orders)
   end
 end
