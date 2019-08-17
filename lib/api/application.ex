@@ -8,9 +8,9 @@ defmodule Cleverbot.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
+      {Cleverbot.StocksService, []},
       supervisor(CleverbotWeb.Endpoint, []),
       {Redix, name: :redix},
-      {Cleverbot.StocksService, []},
       %{
         id: Phoenix.PubSub.PG2,
         start: {Phoenix.PubSub.PG2, :start_link, [:cleverbot_topic, []]}

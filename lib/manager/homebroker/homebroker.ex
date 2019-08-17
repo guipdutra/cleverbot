@@ -20,8 +20,7 @@ defmodule Cleverbot.Manager.Homebroker do
 
     result = case Enum.empty?(orders) do
       true -> :there_is_no_stocks_to_sell
-      false ->
-        save_order_if_there_is_one_active(stock, orders)
+      false -> save_order_if_there_is_stocks(stock, orders)
         IO.puts "ordem de VENDA, preço: #{stock.price}"
         stock
     end
@@ -30,7 +29,7 @@ defmodule Cleverbot.Manager.Homebroker do
   end
 
   defp save_order_if_there_is_stocks(stock, orders) do
-    case List.first(orders)[:type] do
+    case List.first(orders)["type"] do
       "buy" ->
         Repository.save_order(stock.currency_code, %{price: stock.price, type: "sell", quantity: 100})
         stock
@@ -40,7 +39,7 @@ defmodule Cleverbot.Manager.Homebroker do
   end
 
   defp save_order_if_there_is_one_active(stock, orders) do
-    case List.first(orders)[:type] do
+    case List.first(orders)["type"] do
       "buy" ->
         :already_exist_order_waiting_for_sell
       "sell" ->

@@ -41,11 +41,13 @@ defmodule Cleverbot.Bot do
 
   defp create_buy_order(currency_code, stock) do
     {:ok, orders} = Repository.get_orders(currency_code)
+    orders = orders |> Enum.map(&Poison.decode!/1)
     Homebroker.buy(%{currency_code: currency_code, quantity: 100, price: stock.price}, orders)
   end
 
   defp create_sell_order(currency_code, stock) do
     {:ok, orders} = Repository.get_orders(currency_code)
+    orders = orders |> Enum.map(&Poison.decode!/1)
     Homebroker.sell(%{currency_code: currency_code, quantity: 100, price: stock.price}, orders)
   end
 end
