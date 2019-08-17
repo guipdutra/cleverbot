@@ -7,5 +7,7 @@ defmodule CleverbotWeb.Router do
 
   scope "/api", CleverbotWeb do
     pipe_through :api
+
+    post "/bot/create", BotsController, :create_and_start
   end
 end

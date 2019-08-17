@@ -22,6 +22,7 @@ defmodule CleverbotWeb do
       use Phoenix.Controller, namespace: CleverbotWeb
       import Plug.Conn
       import CleverbotWeb.Router.Helpers
+      import CleverbotWeb.Controllers.Helpers
       import CleverbotWeb.Gettext
     end
   end
