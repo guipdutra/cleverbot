@@ -10,6 +10,6 @@ defmodule Cleverbot.Manager.Utils.StockParseTest do
         "4629.36825592", 0, "1.34543425", "1.22000000"]
     ]
 
-    Cleverbot.Manager.Utils.StockParse.parse(stock_data) == %{currency_code: 218, price: 1.34543425}
+    assert Cleverbot.Manager.Utils.StockParse.parse(stock_data) == %{currency_code: 218, price: "1.34543425"}
   end
 end

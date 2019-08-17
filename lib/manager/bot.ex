@@ -4,10 +4,9 @@ defmodule Cleverbot.Bot do
   alias Cleverbot.Repo.Repository
   alias Cleverbot.Manager.Strategies.SimpleMovingAverage
   alias Cleverbot.Manager.Homebroker
-  import SMA
 
   def start_link(params) do
-    GenServer.start_link(__MODULE__, params, name: __MODULE__)
+    GenServer.start_link(__MODULE__, params)
   end
 
   def get() do
