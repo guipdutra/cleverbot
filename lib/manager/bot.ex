@@ -6,7 +6,7 @@ defmodule Cleverbot.Bot do
   alias Cleverbot.Manager.Homebroker
 
   def start_link(params) do
-    GenServer.start_link(__MODULE__, params)
+    GenServer.start_link(__MODULE__, params, name: String.to_atom("bot_#{params.currency_code}"))
   end
 
   def get() do

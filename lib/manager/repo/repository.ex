@@ -11,6 +11,18 @@ defmodule Cleverbot.Repo.Repository do
     end
   end
 
+  def save_bot(currency_code, pid) do
+    currency_code |>
+    bot_namespace |>
+    push(pid)
+  end
+
+  def get_bot(currency_code) do
+    currency_code |>
+    bot_namespace |>
+    pull
+  end
+
   def get_stocks(currency_code) do
     currency_code |>
     stocks_namespace |>
@@ -43,5 +55,9 @@ defmodule Cleverbot.Repo.Repository do
 
   defp orders_namespace(currency_code) do
     "orders_#{currency_code}"
+  end
+
+  defp bot_namespace(currency_code) do
+    "bot_#{currency_code}"
   end
 end
