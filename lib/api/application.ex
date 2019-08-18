@@ -10,7 +10,7 @@ defmodule Cleverbot.Application do
     children = [
       {Cleverbot.StocksService, []},
       supervisor(CleverbotWeb.Endpoint, []),
-      {Redix, name: :redix},
+      {Redix, host: "redis", name: :redix},
       %{
         id: Phoenix.PubSub.PG2,
         start: {Phoenix.PubSub.PG2, :start_link, [:cleverbot_topic, []]}
