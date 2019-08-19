@@ -34,6 +34,20 @@ defmodule Cleverbot.Repo.Repository do
     pull
   end
 
+  def get_orders_total(currency_code) do
+    {:ok, orders} = get_orders(currency_code)
+
+    {:ok, Enum.map_reduce(orders, 0, fn order, acc ->
+      order = Poison.decode!(order)
+      case order["type"] do
+        "buy" ->
+          {order, acc - (order["quantity"] * String.to_float(order["price"])) }
+        "sell" ->
+          {order, acc + (order["quantity"] * String.to_float(order["price"]))}
+      end
+    end) }
+  end
+
   def save_order(currency_code, order) do
     currency_code |>
     orders_namespace |>
