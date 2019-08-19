@@ -11,16 +11,15 @@ defmodule Cleverbot.Repo.Repository do
     end
   end
 
-  def save_bot(currency_code, pid) do
+  def save_bot(currency_code, bot_params) do
     currency_code |>
     bot_namespace |>
-    push(pid)
+    push(Poison.encode!(bot_params))
   end
 
   def get_bot(currency_code) do
-    currency_code |>
-    bot_namespace |>
-    pull
+    {:ok, bot} = currency_code |> bot_namespace |> pull
+    {:ok, List.first(bot)}
   end
 
   def get_stocks(currency_code) do

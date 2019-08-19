@@ -8,6 +8,8 @@ defmodule CleverbotWeb.BotsController do
     {:ok, pid} = BotManager.create_and_start(%{
       short_period: params.short_period,
       long_period: params.long_period,
+      money: params.money,
+      name: params.name,
       currency_code: params.currency_code
     })
 
