@@ -5,23 +5,17 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
-    networks:
-      - cleverbot
   web:
     build:
       context: .
       dockerfile: Dockerfile
     command: ["mix", "phx.server"]
+    volumes:
+      - .:/app
     environment:
       PORT: 4000
       HOSTNAME: localhost
     ports:
       - "4000:4000"
-    networks:
-      - cleverbot
     depends_on:
       - redis
-
-networks:
-  cleverbot:
-    driver: "bridge"
