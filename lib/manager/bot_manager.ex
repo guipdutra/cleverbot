@@ -10,7 +10,7 @@ defmodule Cleverbot.BotManager do
     Repository.save_bot(currency_code, %{money: money, name: name, currency_code: currency_code})
   end
 
-  def orders(currency_codes) do
+  def bots(currency_codes) do
     {:ok, Enum.map(currency_codes, fn currency_code ->
       {:ok, bot} = Repository.get_bot(currency_code)
       {:ok, orders} = Repository.get_orders(currency_code)
@@ -22,8 +22,7 @@ defmodule Cleverbot.BotManager do
             order = Poison.decode!(order)
           end)
 
-          require IEx; IEx.pry
-          %{currency_code =>%{ orders: orders, bot: Poison.decode!(bot)} }
+          %{ orders: orders, bot: Poison.decode!(bot)}
       end
     end)}
   end

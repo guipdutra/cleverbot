@@ -5,8 +5,8 @@ defmodule CleverbotWeb.BotsView do
     %{created: true}
   end
 
-  def render("orders.json", %{orders: orders}) do
-    %{orders: orders}
+  def render("bots.json", %{bots: bots}) do
+    %{bots: bots}
   end
 end
 

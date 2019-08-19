@@ -16,11 +16,11 @@ defmodule CleverbotWeb.BotsController do
     render(conn, "created.json")
   end
 
-  def orders(conn, params) do
+  def bots(conn, params) do
     params = params |> atomize_keys
 
-    {:ok, orders} = BotManager.orders(params.currency_codes)
+    {:ok, bots} = BotManager.bots(params.currency_codes)
 
-    render(conn, "orders.json", orders: orders)
+    render(conn, "bots.json", bots: bots)
   end
 end
