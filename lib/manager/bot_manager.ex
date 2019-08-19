@@ -15,8 +15,7 @@ defmodule Cleverbot.BotManager do
       {:ok, bot} = Repository.get_bot(currency_code)
       {:ok, orders} = Repository.get_orders(currency_code)
       case {orders, bot} do
-        {[], nil} ->
-          %{currency_code =>%{ orders: [], bot: nil} }
+        {[], nil} -> %{ orders: [], bot: nil }
         _ ->
           orders = orders |> Enum.map(fn order ->
             order = Poison.decode!(order)
