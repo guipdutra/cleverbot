@@ -12,15 +12,19 @@ defmodule Cleverbot.BotManager do
 
   def orders(currency_codes) do
     {:ok, Enum.map(currency_codes, fn currency_code ->
-      {:ok, orders} = Repository.get_orders(currency_code)
       {:ok, bot} = Repository.get_bot(currency_code)
+      {:ok, orders} = Repository.get_orders(currency_code)
+      case {orders, bot} do
+        {[], nil} ->
+          %{currency_code =>%{ orders: [], bot: nil} }
+        _ ->
+          orders = orders |> Enum.map(fn order ->
+            order = Poison.decode!(order)
+          end)
 
-      orders = orders |> Enum.map(fn order ->
-        order = Poison.decode!(order)
-        Map.merge(order, Poison.decode!(bot))
-      end)
-
-      %{currency_code => orders}
+          require IEx; IEx.pry
+          %{currency_code =>%{ orders: orders, bot: Poison.decode!(bot)} }
+      end
     end)}
   end
 
