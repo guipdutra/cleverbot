@@ -18,5 +18,3 @@ test:
   <<: *COMMON_BEFORE_SCRIPT
   script:
     - mix test
-    - mix format --check-formatted --dry-run
-    - mix credo --strict
