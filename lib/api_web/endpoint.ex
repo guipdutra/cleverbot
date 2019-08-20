@@ -35,6 +35,7 @@ defmodule CleverbotWeb.Endpoint do
     key: "_api_key",
     signing_salt: "RINW/Flp"
 
+  plug CORSPlug
   plug CleverbotWeb.Router
 
   @doc """

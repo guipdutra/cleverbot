@@ -6,11 +6,11 @@ defmodule CleverbotWeb.BotsController do
     params = params |> atomize_keys
 
     {:ok, pid} = BotManager.create_and_start(%{
-      short_period: params.short_period,
-      long_period: params.long_period,
-      money: params.money,
+      short_period: String.to_integer(params.short_period),
+      long_period: String.to_integer(params.long_period),
+      money: String.to_float(params.money),
       name: params.name,
-      currency_code: params.currency_code
+      currency_code: String.to_integer(params.currency_code)
     })
 
     render(conn, "created.json")

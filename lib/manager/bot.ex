@@ -24,7 +24,6 @@ defmodule Cleverbot.Bot do
     if stock.currency_code == state.currency_code do
       Repository.save_stock(%{currency_code: state.currency_code, price: stock.price})
       {:ok, stocks} = Repository.get_stocks(state.currency_code)
-      IO.inspect stocks
 
       case SimpleMovingAverage.execute(%{short_period: state.short_period, long_period: state.long_period, stocks: stocks}) do
         :buy -> create_buy_order(state.currency_code, stock)

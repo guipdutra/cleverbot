@@ -42,7 +42,8 @@ defmodule Cleverbot.Mixfile do
       {:redix, ">= 0.0.0"},
       {:castore, ">= 0.0.0"},
       {:sma, "~> 0.1"},
-      {:websockex, "~> 0.4.0"}
+      {:websockex, "~> 0.4.0"},
+      {:cors_plug, "~> 1.5"},
     ]
   end
 
