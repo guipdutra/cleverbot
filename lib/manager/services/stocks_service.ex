@@ -9,8 +9,6 @@ defmodule Cleverbot.StocksService do
   end
 
   def handle_frame({type, msg}, state) do
-    #IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
-
     case msg do
       "[1002,1]" ->
         IO.puts "Subscription acknowledgement"
